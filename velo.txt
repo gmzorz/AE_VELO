@@ -1,0 +1,21 @@
+velo = effect("velocity")("Slider");
+ofs = effect("offset")("Slider");
+n = velo.numKeys;
+if (n > 0 && velo.key(1).time < time)
+{
+  clc = velo.key(1).value*(velo.key(1).time - inPoint);
+  for (i = 2; i <= n; i++)
+{
+    if (velo.key(i).time > time) break;
+    k1 = velo.key(i-1);
+    k2 = velo.key(i);
+    v2 = velo.valueAtTime(k2.time-.001);
+    clc += (k1.value + v2)*(k2.time - k1.time)/2;
+  }
+  clc += (velo.value + velo.key(i-1).value)*(time - velo.key(i-1).time)/2;
+}
+else
+{
+  clc = velo.value*(time - inPoint);
+}
+((value + clc)/100+ofs/1000);
